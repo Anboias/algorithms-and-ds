@@ -4,7 +4,11 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const UsingSSR = ({ serverData }) => {
+interface UsingSSRI {
+  serverData: any
+}
+
+const UsingSSR = ({ serverData }: UsingSSRI) => {
   return (
     <Layout>
       <Seo title="Using SSR" />

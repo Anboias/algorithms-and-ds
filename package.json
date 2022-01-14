@@ -1,18 +1,23 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "algorithms-and-ds",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Algorithms and Data Structures project",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Bogdan Iasinovschi <biasinovschi@gmail.com>",
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.8",
     "gatsby": "^4.5.2",
     "gatsby-plugin-gatsby-cloud": "^4.5.1",
     "gatsby-plugin-image": "^2.5.1",
     "gatsby-plugin-manifest": "^4.5.1",
+    "gatsby-plugin-material-ui": "^4.0.2",
     "gatsby-plugin-offline": "^5.5.1",
     "gatsby-plugin-react-helmet": "^5.5.0",
     "gatsby-plugin-sharp": "^4.5.1",
     "gatsby-source-filesystem": "^4.5.1",
+    "gatsby-theme-material-ui": "^5.1.0",
     "gatsby-transformer-sharp": "^4.5.0",
     "prop-types": "^15.8.0",
     "react": "^17.0.1",
@@ -20,6 +25,10 @@
     "react-helmet": "^6.1.0"
   },
   "devDependencies": {
+    "@types/node": "^17.0.8",
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-helmet": "^6.1.5",
     "prettier": "^2.5.1"
   },
   "keywords": [
@@ -30,10 +39,11 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "start": "gatsby develop",
+    "start": "PORT=8005 gatsby develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "type-check": "./node_modules/typescript/bin/tsc --noEmit --skipLibCheck"
   },
   "repository": {
     "type": "git",
