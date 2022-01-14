@@ -41,13 +41,14 @@ const Layout = ({ children }: LayoutI) => {
           margin: `0 auto`,
           padding: "1.2rem 0.65rem",
           paddingBottom: 0,
-          height: "100%",
+          height: "80%",
           display: "flex",
           flexDirection: "column",
           alignItems: "space-between",
+          position: "relative",
         }}
       >
-        <main style={{ height: "100%" }}>{children}</main>
+        <main style={{ height: "100%", position: "relative" }}>{children}</main>
       </div>
       {/* <footer
         style={{

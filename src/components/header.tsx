@@ -9,8 +9,6 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
   <header
     style={{
       background: `rebeccapurple`,
-      // marginBottom: `1.45rem`,
-      // height: "auto",
       width: "100%",
       // position: 'fixed'
     }}
@@ -55,6 +53,7 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
                 color: "white",
                 backgroundColor: "orange",
                 marginLeft: 10,
+                marginBottom: 5,
               }}
             >
               {item}

@@ -1,15 +1,17 @@
 // basic gatsbyjs tsconfig.json
 {
   "compilerOptions": {
+    "allowJs": true,
     "module": "commonjs",
     "target": "esnext",
     "jsx": "preserve",
-    "lib": ["dom", "esnext"],
+    "lib": ["dom", "esnext", "es6"],
     "strict": true,
     "noEmit": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "noUnusedLocals": false
+
     // "noImplicitAny": true
   },
   "exclude": ["node_modules", "public", ".cache"]

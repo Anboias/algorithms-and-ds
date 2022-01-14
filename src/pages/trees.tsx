@@ -6,10 +6,12 @@ import Layout from "../components/layout"
 import Seo from "../components/seo"
 import Content from "../components/content"
 
+const treesOptions = ["Binary Tree", "AVL Tree", "Red Black Tree"]
+
 const TreesPage = () => (
   <Layout>
     <Seo title="Home" />
-    <Content options={[""]} title="Trees">
+    <Content options={treesOptions} title="Trees">
       <p>Content test trees</p>
     </Content>
   </Layout>
