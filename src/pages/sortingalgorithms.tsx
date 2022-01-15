@@ -7,6 +7,9 @@ import Seo from "../components/seo"
 import Content from "../components/content"
 import BubbleSort from "../components/sorting/bubblesort"
 
+import Box from "@mui/material/Box"
+import Slider from "@mui/material/Slider"
+
 const sortingAlgorithms = [
   "Bubble Sort",
   "Merge Sort",
@@ -18,7 +21,9 @@ const sortingAlgorithms = [
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(-1)
-  let selectedJSX = null
+  const [speed, setSpeed] = React.useState(500)
+  const [noOfEntries, setNoOfEntries] = React.useState(30)
+  const [data, setData] = React.useState(null)
 
   // Handlers
   const handleSelection = (event: any) => {
@@ -26,24 +31,34 @@ const SortingAlgorithmsPage = () => {
     setSelected((prevValue) => (prevValue === newId ? -1 : newId))
   }
 
-  const data: number[] = Array.from({ length: 30 })
-  let index = 0
+  // Load random data
+  React.useEffect(() => {
+    const newData = Array.from({ length: noOfEntries })
 
-  while (index < data.length) {
-    var randomN = Math.floor(Math.random() * 100) + 1
-    if (data.indexOf(randomN) === -1) {
-      data[index] = randomN
-      index++
+    let index = 0
+    while (index < newData.length) {
+      var randomN = Math.floor(Math.random() * 100) + 1
+      if (newData.indexOf(randomN) === -1) {
+        newData[index] = randomN
+        index++
+      }
+    }
+    setData(newData)
+  }, [noOfEntries])
+
+  // Render selected algorithm
+  let selectedJSX = null
+  if (data) {
+    switch (selected) {
+      case sortingAlgorithms.indexOf("Bubble Sort"):
+        selectedJSX = <BubbleSort data={data} speed={speed} />
+        break
+      default:
+        break
     }
   }
 
-  switch (selected) {
-    case sortingAlgorithms.indexOf("Bubble Sort"):
-      selectedJSX = <BubbleSort data={data} />
-      break
-    default:
-      break
-  }
+  console.log("speed", speed)
 
   return (
     <Layout>
@@ -52,6 +67,10 @@ const SortingAlgorithmsPage = () => {
         handleSelection={handleSelection}
         options={sortingAlgorithms}
         selected={selected}
+        setSpeed={setSpeed}
+        speed={speed}
+        setNoOfEntries={setNoOfEntries}
+        noOfEntries={noOfEntries}
         title="Sorting Algorithms"
       >
         <div
@@ -61,6 +80,49 @@ const SortingAlgorithmsPage = () => {
             height: "100%",
           }}
         >
+          <div
+            style={{
+              marginTop: -5,
+              marginBottom: 5,
+              padding: 0,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
+          >
+            <Box width={300}>
+              <span style={{ fontSize: 14, color: "gray", marginLeft: 5 }}>
+                Entries
+              </span>
+              <Slider
+                aria-label="Entries"
+                defaultValue={noOfEntries}
+                onChange={(event) => setNoOfEntries(event.target.value)}
+                // getAriaValueText={noOfEntries}
+                marks
+                min={20}
+                max={60}
+                step={5}
+                style={{ marginTop: -5 }}
+                valueLabelDisplay="auto"
+              />
+            </Box>
+            <Box width={300}>
+              <span style={{ fontSize: 14, color: "gray" }}>Speed</span>
+              <Slider
+                aria-label="Speed"
+                defaultValue={speed}
+                onChange={(event) => setSpeed(event.target.value)}
+                // getAriaValueText={noOfEntries}
+                marks
+                min={25}
+                max={800}
+                step={50}
+                style={{ marginTop: -5 }}
+                valueLabelDisplay="auto"
+              />
+            </Box>
+          </div>
           {selectedJSX}
         </div>
       </Content>

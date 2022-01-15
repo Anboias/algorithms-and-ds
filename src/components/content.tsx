@@ -12,16 +12,24 @@ import classes from "./content.classes"
 interface ContentI {
   children: React.ReactNode
   handleSelection(event: any): void
+  setNoOfEntries(event: any): void
+  setSpeed(event: any): void
   options: string[]
   selected: number
+  speed: number
+  noOfEntries: number
   title: string
 }
 
 const Content = ({
   children,
   handleSelection,
+  noOfEntries,
   options,
   selected,
+  setNoOfEntries,
+  setSpeed,
+  speed,
   title,
 }: ContentI) => {
   return (

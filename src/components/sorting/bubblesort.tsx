@@ -5,11 +5,10 @@ import constants from "../../constants"
 
 interface BubbleSortI {
   data?: number[]
+  speed: number
 }
 
-const DELAY = 250
-
-const BubbleSort = ({ data }: BubbleSortI) => {
+const BubbleSort = ({ data, speed }: BubbleSortI) => {
   // Store values locally and changed them while sorting
   const [localData, setLocalData] = React.useState(null)
 
@@ -41,7 +40,13 @@ const BubbleSort = ({ data }: BubbleSortI) => {
         sortedValues.add(sortedValue)
       }
 
-      await doDelay(DELAY)
+      console.log("before delay", speed)
+
+      // Add delay to the execution
+      await doDelay(speed)
+
+      console.log("after delay", speed)
+      console.log("====================")
 
       setLocalData((prevValues: number[]) => {
         const indexOfFirst = prevValues.indexOf(firstEl)
@@ -59,17 +64,18 @@ const BubbleSort = ({ data }: BubbleSortI) => {
 
         if (firstEl && secondEl) {
           // Slide first bar
-          document.getElementById(
-            `bar-${firstEl}`
-          ).style.transform = `translate(${
-            firstEl > secondEl ? offset : 0
-          }px,0)`
+          const leftEl = document.getElementById(`bar-${firstEl}`)
+          if (leftEl)
+            leftEl.style.transform = `translate(${
+              firstEl > secondEl ? offset : 0
+            }px,0)`
+
           // Slide second bar
-          document.getElementById(
-            `bar-${secondEl}`
-          ).style.transform = `translate(${
-            secondEl > firstEl ? 0 : -offset
-          }px,0)`
+          const rightEl = document.getElementById(`bar-${secondEl}`)
+          if (rightEl)
+            rightEl.style.transform = `translate(${
+              secondEl > firstEl ? 0 : -offset
+            }px,0)`
         }
 
         twoNumbersSelection.current = [
@@ -84,7 +90,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
     setLocalData((prevValues: number[]) => [...prevValues])
     // Add the remaining elements to the values sorted array
     sortingSteps.forEach((el) => sortedValues.add(el))
-  }, [])
+  }, [speed])
 
   // Update UI for each sorting step
   React.useEffect(() => {
@@ -126,7 +132,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
                 : twoNumbersSelection.current[1] === item
                 ? constants.COLORS.RIGHT_BAR
                 : constants.COLORS.CURRENT,
-              margin: `0 .15em`,
+              margin: `0 .15em`, // Change logic to fit in 100%
               display: `flex`,
               justifyContent: `center`,
               borderRadius: "0 0 5px 5px",
