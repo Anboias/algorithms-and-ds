@@ -2,10 +2,10 @@ import * as React from "react"
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 
-import Layout from "../../components/layout"
-import Seo from "../../components/seo"
-import Content from "../../components/content"
-import BubbleSort from "./bubblesort"
+import Layout from "../components/layout"
+import Seo from "../components/seo"
+import Content from "../components/content"
+import BubbleSort from "../components/sorting/bubblesort"
 
 const sortingAlgorithms = [
   "Merge Sort",
@@ -15,6 +15,8 @@ const sortingAlgorithms = [
   "Insertion Sort",
 ]
 
+const data = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100))
+
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(-1)
@@ -23,12 +25,12 @@ const SortingAlgorithmsPage = () => {
   // Handlers
   const handleSelection = (event: any) => {
     const newId = parseInt(event.target.id)
-    setSelected(prevValue => (prevValue === newId ? -1 : newId))
+    setSelected((prevValue) => (prevValue === newId ? -1 : newId))
   }
 
   switch (selected) {
     case sortingAlgorithms.indexOf("Bubble Sort"):
-      selectedJSX = <BubbleSort data={[123, 32, 5, 10, 1, 100]} />
+      selectedJSX = <BubbleSort data={data} />
       break
     default:
       break
@@ -43,7 +45,9 @@ const SortingAlgorithmsPage = () => {
         selected={selected}
         title="Sorting Algorithms"
       >
-        {selectedJSX}
+        <div style={{ border: "1px dotted gray", height: "100%" }}>
+          {selectedJSX}
+        </div>
       </Content>
     </Layout>
   )

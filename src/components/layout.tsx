@@ -17,7 +17,6 @@ interface LayoutI {
 }
 
 const Layout = ({ children }: LayoutI) => {
-  console.log("children", children)
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {

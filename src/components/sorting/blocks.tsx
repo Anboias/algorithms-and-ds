@@ -1,15 +1,14 @@
 import * as React from "react"
 import { Button } from "@mui/material"
-import sorting from "../../components/sorting/algorithms/sorting"
 
-interface BubbleSortI {
+interface BlocksI {
   data?: number[]
 }
 
-const BubbleSort = ({ data }: BubbleSortI) => {
+const Blocks = ({ data }: BlocksI) => {
   // console.log("data bubbled", sorting.bubbleSortAlgorithm(data))
 
   return <div>{data?.toString()}</div>
 }
 
-export default BubbleSort
+export default Blocks

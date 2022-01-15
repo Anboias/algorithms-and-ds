@@ -7,10 +7,6 @@ interface BubbleSortI {
 }
 const sortedValues = new Set()
 
-function timeout(delay: number) {
-  return new Promise((res) => setTimeout(res, delay))
-}
-
 const BubbleSort = ({ data }: BubbleSortI) => {
   // Store values locally and changed them while sorting
   const [localData, setLocalData] = React.useState(data)
@@ -28,8 +24,6 @@ const BubbleSort = ({ data }: BubbleSortI) => {
     [data]
   )
 
-  // await timeout(1000)
-
   // Update UI for each sorting step
   React.useEffect(
     () =>
@@ -39,18 +33,19 @@ const BubbleSort = ({ data }: BubbleSortI) => {
 
         // setTwoNumbersSelection([firstEl, secondEl])
 
+        if (sortedValue) {
+          sortedValues.add(sortedValue)
+        }
+
         if (swap) {
           setTimeout(() => {
-            // const interval = setInterval(() => {
-            // You'd want an exit condition here
             setLocalData((prevValues) => {
               const temp = prevValues[Number(firstEl)]
               prevValues[Number(firstEl)] = prevValues[Number(secondEl)]
               prevValues[Number(secondEl)] = temp
               return prevValues.slice()
             })
-            // }, 1000)
-          }, 3000)
+          }, 2000)
         }
       }),
     []
@@ -68,11 +63,11 @@ const BubbleSort = ({ data }: BubbleSortI) => {
         display: "flex",
         flexDirection: "row",
         height: "100%",
-        transition: "2s all ease",
       }}
     >
       {localData?.map((item: number, idx: number) => {
         const calcHeight = ((max - min) / 100) * item
+        const calcWidth = 100 / localData.length
 
         return (
           <div
@@ -80,13 +75,13 @@ const BubbleSort = ({ data }: BubbleSortI) => {
             style={{
               height: `${calcHeight}%`,
               minHeight: `30px`,
-              width: `3%`,
+              width: `${calcWidth}%`,
               // border: `1px solid green`,
               backgroundColor: sortedValues.has(item) ? `red` : `green`,
               margin: `0 2px`,
               display: `flex`,
               justifyContent: `center`,
-              transition: "2s all ease",
+              transition: "1s all ease",
             }}
           >
             <p style={{ color: "white", fontSize: 12 }}>{item}</p>

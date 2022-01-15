@@ -8,7 +8,6 @@
 import * as React from "react"
 import { Button } from "@mui/material"
 import classes from "./content.classes"
-import { Link } from "gatsby"
 
 interface ContentI {
   children: React.ReactNode
@@ -31,21 +30,19 @@ const Content = ({
       <div style={{ margin: "10px 0" }}>
         {options.map((item, idx) => {
           return (
-            <Link to={`${item.toLowerCase().replace(/\s/g, "")}`}>
-              <Button
-                className={idx === selected ? "active" : ""}
-                id={idx}
-                key={idx}
-                onClick={handleSelection}
-                style={{
-                  marginRight: 10,
-                  marginBottom: 5,
-                }}
-                sx={{ ...classes.button }}
-              >
-                {item}
-              </Button>
-            </Link>
+            <Button
+              className={idx === selected ? "active" : ""}
+              id={idx}
+              key={idx}
+              onClick={handleSelection}
+              style={{
+                marginRight: 10,
+                marginBottom: 5,
+              }}
+              sx={{ ...classes.button }}
+            >
+              {item}
+            </Button>
           )
         })}
       </div>
