@@ -6,14 +6,17 @@ interface BubbleSortI {
   data?: number[]
 }
 
+const DELAY = 100
+
 const BubbleSort = ({ data }: BubbleSortI) => {
   // Store values locally and changed them while sorting
   const [localData, setLocalData] = React.useState(data)
 
   // Constants
-  const dataL = data?.length
-  const max = data ? Math.max(...data) : -1
-  const min = data ? Math.min(...data) : -1
+  const [max, min] = React.useMemo(
+    () => [Math.max(...data), Math.min(...data)],
+    [data]
+  )
   const wHeight = window.innerHeight
   const twoNumbersSelection = React.useRef([])
   const sortedValues = React.useMemo(() => new Set(), [data])
@@ -37,7 +40,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
         sortedValues.add(sortedValue)
       }
 
-      await doDelay(25)
+      await doDelay(DELAY)
 
       if (swap) {
         setLocalData((prevValues) => {
@@ -90,17 +93,20 @@ const BubbleSort = ({ data }: BubbleSortI) => {
               width: `${calcWidth}%`,
               // border: `1px solid green`,
               backgroundColor: sortedValues.has(item)
-                ? `red`
+                ? `green`
                 : twoNumbersSelection.current.includes(item)
-                ? "yellow"
-                : `green`,
-              margin: `0 2px`,
+                ? "black"
+                : `gray`,
+              margin: `0 .15em`,
               display: `flex`,
               justifyContent: `center`,
-              // transition: "1s all ease",
+              // transition: "0.5s all ease",
+              borderRadius: "0 0 5px 5px",
             }}
           >
-            <p style={{ color: "white", fontSize: 12 }}>{item}</p>
+            <p style={{ color: "white", fontSize: "0.7em", padding: 5 }}>
+              {item}
+            </p>
           </div>
         )
       })}
