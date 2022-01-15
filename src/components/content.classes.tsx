@@ -1,3 +1,5 @@
+import constants from "../constants"
+
 export default {
   button: {
     border: "2px solid gray",
@@ -8,13 +10,13 @@ export default {
     fontWeight: 500,
     fontSize: 14,
     "&:hover": {
-      border: "2px solid black",
-      backgroundColor: "black",
+      border: `2px solid ${constants.COLORS.DARK_GREEN}`,
+      backgroundColor: constants.COLORS.DARK_GREEN,
       color: "white",
     },
     "&.active": {
-      border: "2px solid black",
-      backgroundColor: "black",
+      border: `2px solid ${constants.COLORS.DARK_GREEN}`,
+      backgroundColor: constants.COLORS.DARK_GREEN,
       color: "white",
     },
   },

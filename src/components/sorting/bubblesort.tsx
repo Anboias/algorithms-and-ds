@@ -1,12 +1,13 @@
 import * as React from "react"
 import { Button } from "@mui/material"
 import { algos } from "../../components/sorting/algorithms/sorting"
+import constants from "../../constants"
 
 interface BubbleSortI {
   data?: number[]
 }
 
-const DELAY = 100
+const DELAY = 500
 
 const BubbleSort = ({ data }: BubbleSortI) => {
   // Store values locally and changed them while sorting
@@ -75,10 +76,10 @@ const BubbleSort = ({ data }: BubbleSortI) => {
   return (
     <div
       style={{
-        border: "1px solid yellow",
         display: "flex",
         flexDirection: "row",
         height: "100%",
+        // transition: "1s all ease",
       }}
     >
       {localData?.map((item: number, idx: number) => {
@@ -92,17 +93,20 @@ const BubbleSort = ({ data }: BubbleSortI) => {
               height: `${calcHeight}%`,
               minHeight: `30px`,
               width: `${calcWidth}%`,
-              // border: `1px solid green`,
               backgroundColor: sortedValues.has(item)
-                ? `green`
-                : twoNumbersSelection.current.includes(item)
-                ? "black"
-                : `gray`,
+                ? constants.COLORS.DARK_GREEN
+                : twoNumbersSelection.current[0] === item
+                ? constants.COLORS.LEFT_BAR
+                : twoNumbersSelection.current[1] === item
+                ? constants.COLORS.RIGHT_BAR
+                : constants.COLORS.CURRENT,
               margin: `0 .15em`,
               display: `flex`,
               justifyContent: `center`,
               // transition: "0.5s all ease",
               borderRadius: "0 0 5px 5px",
+              // transition: "1s all ease",
+              // transform: "translate(30px, 20px) rotate(20deg)",
             }}
           >
             <p style={{ color: "white", fontSize: "0.7em", padding: 5 }}>
