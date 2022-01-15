@@ -7,7 +7,7 @@ interface BubbleSortI {
   data?: number[]
 }
 
-const DELAY = 500
+const DELAY = 250
 
 const BubbleSort = ({ data }: BubbleSortI) => {
   // Store values locally and changed them while sorting
@@ -43,19 +43,22 @@ const BubbleSort = ({ data }: BubbleSortI) => {
 
       await doDelay(DELAY)
 
-      if (swap) {
-        setLocalData((prevValues: number[]) => {
-          const indexOfFirst = prevValues.indexOf(firstEl)
-          const indexOfSecond = prevValues.indexOf(secondEl)
+      setLocalData((prevValues: number[]) => {
+        const indexOfFirst = prevValues.indexOf(firstEl)
+        const indexOfSecond = prevValues.indexOf(secondEl)
 
+        if (swap) {
           prevValues[indexOfFirst] = secondEl
           prevValues[indexOfSecond] = firstEl
+        }
 
-          twoNumbersSelection.current[0] = firstEl
-          twoNumbersSelection.current[1] = secondEl
-          return prevValues.slice()
-        })
-      }
+        twoNumbersSelection.current = [
+          Math.min(firstEl, secondEl),
+          Math.max(firstEl, secondEl),
+        ]
+        // twoNumbersSelection.current[1] = secondEl
+        return prevValues.slice()
+      })
     }
     setLocalData((prevValues: number[]) => [...prevValues])
     sortingSteps.forEach((el) => sortedValues.add(el))
@@ -100,6 +103,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
                 : twoNumbersSelection.current[1] === item
                 ? constants.COLORS.RIGHT_BAR
                 : constants.COLORS.CURRENT,
+
               margin: `0 .15em`,
               display: `flex`,
               justifyContent: `center`,
@@ -109,7 +113,19 @@ const BubbleSort = ({ data }: BubbleSortI) => {
               // transform: "translate(30px, 20px) rotate(20deg)",
             }}
           >
-            <p style={{ color: "white", fontSize: "0.7em", padding: 5 }}>
+            <p
+              style={{
+                color: sortedValues.has(item)
+                  ? "white"
+                  : twoNumbersSelection.current[0] === item
+                  ? "white"
+                  : twoNumbersSelection.current[1] === item
+                  ? "white"
+                  : constants.COLORS.DARK_GREEN,
+                fontSize: "0.7em",
+                padding: 5,
+              }}
+            >
               {item}
             </p>
           </div>
