@@ -10,7 +10,7 @@ const DELAY = 100
 
 const BubbleSort = ({ data }: BubbleSortI) => {
   // Store values locally and changed them while sorting
-  const [localData, setLocalData] = React.useState(data)
+  const [localData, setLocalData] = React.useState(null)
 
   // Constants
   const [max, min] = React.useMemo(
@@ -27,7 +27,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
     [data]
   )
 
-  const doDelay = (delay) =>
+  const doDelay = (delay: number) =>
     new Promise<void>((resolve) => setTimeout(() => resolve(), delay))
 
   const doMagic = React.useCallback(async () => {
@@ -43,7 +43,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
       await doDelay(DELAY)
 
       if (swap) {
-        setLocalData((prevValues) => {
+        setLocalData((prevValues: number[]) => {
           const indexOfFirst = prevValues.indexOf(firstEl)
           const indexOfSecond = prevValues.indexOf(secondEl)
 
@@ -56,20 +56,21 @@ const BubbleSort = ({ data }: BubbleSortI) => {
         })
       }
     }
-    setLocalData((prevValues) => [...prevValues])
+    setLocalData((prevValues: number[]) => [...prevValues])
     sortingSteps.forEach((el) => sortedValues.add(el))
   }, [])
 
   // Update UI for each sorting step
   React.useEffect(() => {
     doMagic()
-    return () => {
-      sortedValues.clear()
-      setLocalData(data)
-      twoNumbersSelection.current = []
-    }
   }, [sortingSteps])
-  // })}  ,1000}
+
+  // Initialize vars
+  React.useEffect(() => {
+    setLocalData(data)
+    sortedValues.clear()
+    twoNumbersSelection.current = []
+  }, [data])
 
   return (
     <div
