@@ -8,9 +8,9 @@ import Content from "../components/content"
 import BubbleSort from "../components/sorting/bubblesort"
 
 const sortingAlgorithms = [
+  "Bubble Sort",
   "Merge Sort",
   "Quick Sort",
-  "Bubble Sort",
   "Selection Sort",
   "Insertion Sort",
 ]

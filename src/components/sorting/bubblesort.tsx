@@ -18,7 +18,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
     () => [Math.max(...data), Math.min(...data)],
     [data]
   )
-  const wHeight = window.innerHeight
+  const calcWidth = 100 / data.length
   const twoNumbersSelection = React.useRef([])
   const sortedValues = React.useMemo(() => new Set(), [data])
 
@@ -52,6 +52,26 @@ const BubbleSort = ({ data }: BubbleSortI) => {
           prevValues[indexOfSecond] = firstEl
         }
 
+        const containerWidth =
+          document.getElementById("bars-container").clientWidth
+
+        const offset = containerWidth / data.length
+
+        if (firstEl && secondEl) {
+          // Slide first bar
+          document.getElementById(
+            `bar-${firstEl}`
+          ).style.transform = `translate(${
+            firstEl > secondEl ? offset : 0
+          }px,0)`
+          // Slide second bar
+          document.getElementById(
+            `bar-${secondEl}`
+          ).style.transform = `translate(${
+            secondEl > firstEl ? 0 : -offset
+          }px,0)`
+        }
+
         twoNumbersSelection.current = [
           Math.min(firstEl, secondEl),
           Math.max(firstEl, secondEl),
@@ -60,7 +80,9 @@ const BubbleSort = ({ data }: BubbleSortI) => {
         return prevValues.slice()
       })
     }
+    // Set local data to trigger a final render
     setLocalData((prevValues: number[]) => [...prevValues])
+    // Add the remaining elements to the values sorted array
     sortingSteps.forEach((el) => sortedValues.add(el))
   }, [])
 
@@ -78,6 +100,7 @@ const BubbleSort = ({ data }: BubbleSortI) => {
 
   return (
     <div
+      id="bars-container"
       style={{
         display: "flex",
         flexDirection: "row",
@@ -87,10 +110,10 @@ const BubbleSort = ({ data }: BubbleSortI) => {
     >
       {localData?.map((item: number, idx: number) => {
         const calcHeight = ((max - min) / 100) * item
-        const calcWidth = 100 / localData.length
 
         return (
           <div
+            id={`bar-${item}`}
             key={`${idx}-${item}`}
             style={{
               height: `${calcHeight}%`,
@@ -103,14 +126,15 @@ const BubbleSort = ({ data }: BubbleSortI) => {
                 : twoNumbersSelection.current[1] === item
                 ? constants.COLORS.RIGHT_BAR
                 : constants.COLORS.CURRENT,
-
               margin: `0 .15em`,
               display: `flex`,
               justifyContent: `center`,
-              // transition: "0.5s all ease",
               borderRadius: "0 0 5px 5px",
-              // transition: "1s all ease",
-              // transform: "translate(30px, 20px) rotate(20deg)",
+              transition: "all 0.2s ease-in-out",
+              "webkit-transition": "all 0.2s ease-in-out",
+              "-moz-transition": "all 0.2s ease-in-out",
+              "-o-transition": "all 0.2s ease-in-out",
+              "-ms-transition": "all 0.2s ease-in-out",
             }}
           >
             <p

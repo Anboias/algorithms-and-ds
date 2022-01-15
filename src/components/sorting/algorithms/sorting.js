@@ -16,16 +16,7 @@ export const algos = {
       }
       order.push([null, null, null, dupBlocks[j]]) // j-th element is in correct position ( Sorted )
     }
-    console.log("order", order)
     return order
-    // return order.map(
-    //   (el) => new Promise((resolve) => setTimeout(resolve(el), delay))
-    // )
-    // return order.map((orderEl) => {
-    //   return new Promise((resolve) => {
-    //     return setTimeout(() => resolve(orderEl), delay)
-    //   })
-    // })
   },
 }
 

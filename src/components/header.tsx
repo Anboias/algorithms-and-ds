@@ -38,7 +38,7 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
         </h1>
       </div>
       <div>
-        {["Graphs", "Trees", "Sorting Algorithms"].map(item => (
+        {["Sorting Algorithms", "Trees", "Graphs"].map((item) => (
           <Link
             className="header-button"
             key={item}
@@ -49,6 +49,7 @@ const Header = ({ siteTitle }: { siteTitle: string }) => (
             }}
           >
             <Button
+              disabled={item !== "Sorting Algorithms"}
               style={{
                 color: "white",
                 backgroundColor: "orange",
