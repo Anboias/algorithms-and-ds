@@ -20,5 +20,6 @@
     "typeRoots": ["./typings", "./node_modules/@types"]
     // "noImplicitAny": true
   },
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "public", ".cache"]
 }
