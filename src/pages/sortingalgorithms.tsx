@@ -15,8 +15,6 @@ const sortingAlgorithms = [
   "Insertion Sort",
 ]
 
-const data = Array.from({ length: 10 }, () => Math.floor(Math.random() * 100))
-
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(-1)
@@ -28,6 +26,17 @@ const SortingAlgorithmsPage = () => {
     setSelected((prevValue) => (prevValue === newId ? -1 : newId))
   }
 
+  const data: number[] = Array.from({ length: 30 })
+  let index = 0
+
+  while (index < data.length) {
+    var randomN = Math.floor(Math.random() * 100) + 1
+    if (data.indexOf(randomN) === -1) {
+      data[index] = randomN
+      index++
+    }
+  }
+
   switch (selected) {
     case sortingAlgorithms.indexOf("Bubble Sort"):
       selectedJSX = <BubbleSort data={data} />
@@ -35,6 +44,7 @@ const SortingAlgorithmsPage = () => {
     default:
       break
   }
+
 
   return (
     <Layout>

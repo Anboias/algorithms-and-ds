@@ -1,5 +1,5 @@
 export const algos = {
-  bubbleSortAlgorithm: (data, delay = 1500) => {
+  bubbleSortAlgorithm: (data) => {
     const dupBlocks = data.slice()
     const order = []
 
@@ -8,15 +8,15 @@ export const algos = {
     // [j, j + 1, null, null] - selection1; selection2; swapped; fixed value
     for (i = 0; i < dupBlocks.length; i++) {
       for (j = 0; j < dupBlocks.length - i - 1; j++) {
-        order.push([j, j + 1, null, null]) // Compare
+        order.push([dupBlocks[j], dupBlocks[j + 1], null, null]) // Compare
         if (dupBlocks[j] > dupBlocks[j + 1]) {
           swap(dupBlocks, j, j + 1)
-          order.push([j, j + 1, true, null]) // Swap
+          order.push([dupBlocks[j], dupBlocks[j + 1], true, null]) // Swap
         }
       }
       order.push([null, null, null, dupBlocks[j]]) // j-th element is in correct position ( Sorted )
     }
-    console.log("newOrder", order)
+    console.log("order", order)
     return order
     // return order.map(
     //   (el) => new Promise((resolve) => setTimeout(resolve(el), delay))
