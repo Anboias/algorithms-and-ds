@@ -48,10 +48,11 @@ const Content = ({
       </div>
       <div
         style={{
-          border: "1px solid rgba(123,123,123,0.2)",
+          border: "1px solid rgba(123,123,123,0.32)",
           height: "100%",
           borderRadius: 10,
           padding: 10,
+          backgroundColor: "rgba(12,12,12,0.04)",
         }}
       >
         {selected >= 0 ? (

@@ -45,7 +45,6 @@ const SortingAlgorithmsPage = () => {
       break
   }
 
-
   return (
     <Layout>
       <Seo title="Home" />
@@ -55,7 +54,13 @@ const SortingAlgorithmsPage = () => {
         selected={selected}
         title="Sorting Algorithms"
       >
-        <div style={{ border: "1px dotted gray", height: "100%" }}>
+        <div
+          style={{
+            border: "1px dotted rgba(12,12,12,0.02)",
+            // backgroundColor: "rgba(12,12,12,0.03)",
+            height: "100%",
+          }}
+        >
           {selectedJSX}
         </div>
       </Content>
