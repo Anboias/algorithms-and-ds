@@ -66,9 +66,11 @@ const SortingAlgorithmsPage = () => {
 
   // Load random data
   const generateNewRandomData = () => {
+    // Clean running processes
     handleStop()
-    const newData = Array.from({ length: noOfEntries })
 
+    // Handle numbers generator
+    const newData = Array.from({ length: noOfEntries })
     let index = 0
     while (index < newData.length) {
       var randomN = Math.floor(Math.random() * 100) + 1
@@ -165,15 +167,18 @@ const SortingAlgorithmsPage = () => {
   }
 
   const handleStop = () => {
-    console.log("STOP")
-    while (timeouts.current--) window.clearTimeout(timeouts.current)
+    if (running === STATUS.IN_PROGRESS) {
+      while (timeouts.current--) window.clearTimeout(timeouts.current)
+    }
+    setData((prevData) => [...prevData])
     setRunning(STATUS.FINISHED)
     twoNumbersSelection.current[0] = null
     twoNumbersSelection.current[1] = null
-    setData((prevData) => [...prevData])
-    initialData.current.forEach(
-      (el) => document.getElementById(`bar-${el}`).style === null
-    )
+    initialData?.current?.forEach((el: number) => {
+      try {
+        document.getElementById(`bar-${el}`).style === null
+      } catch (err) {}
+    })
     // generateNewRandomData()
   }
 
@@ -289,6 +294,7 @@ const SortingAlgorithmsPage = () => {
                 Randomize
               </Button>
               <Button
+                className={running === STATUS.IN_PROGRESS && "active"}
                 onClick={
                   running === STATUS.IN_PROGRESS ? handleStop : handleSorting
                 }
