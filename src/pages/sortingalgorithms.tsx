@@ -13,9 +13,10 @@ import { Box, Button, Slider } from "@mui/material"
 import FastForwardIcon from "@mui/icons-material/FastForward"
 import AddIcon from "@mui/icons-material/Add"
 
-import classes from "../components/content.classes"
+import useTimeout from "../components/hooks/usetimeout"
 
 import constants from "../constants"
+import classes from "../components/content.classes"
 
 const sortingAlgorithms = [
   "Bubble Sort",
@@ -25,16 +26,24 @@ const sortingAlgorithms = [
   "Insertion Sort",
 ]
 
+const STATUS = {
+  NOT_STARTED: "NOT_STARTED",
+  IN_PROGRESS: "IN_PROGRESS",
+  FINISHED: "FINISHED",
+}
+
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(0) // Show bubble first as default
   const [speed, setSpeed] = React.useState(500)
   const [noOfEntries, setNoOfEntries] = React.useState(25)
   const [data, setData] = React.useState([])
-  const [running, setRunning] = React.useState(false)
+  const [running, setRunning] = React.useState(STATUS.NOT_STARTED)
+  const [sortedValues, setSortedValues] = React.useState(new Set())
 
   const initialData = React.useRef(null)
-  const timeouts = React.useRef([])
+  const currentIndex = React.useRef(0)
+  const timeouts = React.useRef(null)
 
   // Constants
   const [max, min] = React.useMemo(
@@ -43,7 +52,6 @@ const SortingAlgorithmsPage = () => {
   )
   const calcWidth = 100 / data.length
   const twoNumbersSelection = React.useRef([])
-  const sortedValues = React.useMemo(() => new Set(), [data])
   // Do sort - call sorting algorithm
   const sortingSteps = React.useMemo(
     () => algos.bubbleSortAlgorithm(data),
@@ -58,6 +66,7 @@ const SortingAlgorithmsPage = () => {
 
   // Load random data
   const generateNewRandomData = () => {
+    handleStop()
     const newData = Array.from({ length: noOfEntries })
 
     let index = 0
@@ -70,6 +79,7 @@ const SortingAlgorithmsPage = () => {
     }
     initialData.current = newData.slice()
     setData(newData)
+    setSortedValues(new Set())
   }
   // Update data table with new values on entries change
   React.useEffect(() => {
@@ -78,24 +88,27 @@ const SortingAlgorithmsPage = () => {
 
   // Start the sort
   const handleSorting = () => {
-    setRunning(true)
+    setRunning(STATUS.IN_PROGRESS)
+
+    console.log("==== DO SORTING ")
 
     const sortingSteps = algos.bubbleSortAlgorithm(data) // Bubble for now
     sortingSteps.push([-1, -1, false, null, true])
 
     for (let index = 0; index < sortingSteps.length; index++) {
       const orderEl = sortingSteps[index]
+      console.log("still running 1")
+      currentIndex.current += 1
 
       // Destructure el
       const [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
 
-      // Add to sorted Set if existing
-      if (sortedValue) sortedValues.add(sortedValue)
-
       // Update state to trigger re-render. Do it with a timeout
-      setTimeout(() => {
+      timeouts.current = setTimeout(() => {
+        console.log("still running 2")
+
         if (lastEl) {
-          setRunning(false)
+          setRunning(STATUS.FINISHED)
           // Set local data to trigger a final render
           setData((prevValues: number[]) => [...prevValues])
           // Add the remaining elements to the values sorted array
@@ -136,6 +149,13 @@ const SortingAlgorithmsPage = () => {
               Math.min(firstEl, secondEl),
               Math.max(firstEl, secondEl),
             ]
+            // Add to sorted Set if existing
+            if (sortedValue)
+              setSortedValues((prevValues) => {
+                prevValues.add(sortedValue)
+                return prevValues
+              })
+
             // twoNumbersSelection.current[1] = secondEl
             return prevValues.slice()
           })
@@ -146,12 +166,21 @@ const SortingAlgorithmsPage = () => {
 
   const handleStop = () => {
     console.log("STOP")
-
-    setData((prevData) => prevData.slice())
+    while (timeouts.current--) window.clearTimeout(timeouts.current)
+    setRunning(STATUS.FINISHED)
+    twoNumbersSelection.current[0] = null
+    twoNumbersSelection.current[1] = null
+    setData((prevData) => [...prevData])
+    initialData.current.forEach(
+      (el) => document.getElementById(`bar-${el}`).style === null
+    )
+    // generateNewRandomData()
   }
 
-  console.log("running", running)
-  console.log("timeouts.current", timeouts.current)
+  console.log("==== initialData.current", initialData.current)
+  console.log("==== timeouts.current", timeouts.current)
+  console.log("==== currentIndex.current", currentIndex.current)
+  console.log("==== running", running)
 
   return (
     <Layout>
@@ -189,7 +218,7 @@ const SortingAlgorithmsPage = () => {
                 flexDirection: "row",
                 justifyContent: "flex-start",
                 alignItems: "center",
-                width: "30%",
+                width: "50%",
               }}
             >
               <div
@@ -260,14 +289,16 @@ const SortingAlgorithmsPage = () => {
                 Randomize
               </Button>
               <Button
-                onClick={running === true ? handleStop : handleSorting}
+                onClick={
+                  running === STATUS.IN_PROGRESS ? handleStop : handleSorting
+                }
                 style={{
                   marginLeft: 10,
                   marginRight: 5,
                 }}
                 sx={{ ...classes.button }}
               >
-                {running === true ? "Stop" : "Start"}
+                {running === STATUS.IN_PROGRESS ? "Stop" : "Start"}
               </Button>
             </Box>
           </div>
