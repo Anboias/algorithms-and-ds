@@ -8,4 +8,6 @@
   Created with Gatsby
 </h1>
 
-Online @ https://algorithmsandds.gatsbyjs.io/
+<p align="center">
+Live @ https://algorithmsandds.gatsbyjs.io/
+</p>
