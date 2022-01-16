@@ -30,6 +30,7 @@ const STATUS = {
   NOT_STARTED: "NOT_STARTED",
   IN_PROGRESS: "IN_PROGRESS",
   FINISHED: "FINISHED",
+  RESTART: "RESTART",
 }
 
 const SortingAlgorithmsPage = () => {
@@ -73,7 +74,7 @@ const SortingAlgorithmsPage = () => {
     const newData = Array.from({ length: noOfEntries })
     let index = 0
     while (index < newData.length) {
-      var randomN = Math.floor(Math.random() * 100) + 1
+      var randomN = Math.floor(Math.random() * 100) + 10
       if (newData.indexOf(randomN) === -1) {
         newData[index] = randomN
         index++
@@ -88,81 +89,93 @@ const SortingAlgorithmsPage = () => {
     generateNewRandomData()
   }, [noOfEntries])
 
+  // Update data table with new values on entries change
+  React.useEffect(() => {
+    if (running === STATUS.RESTART) {
+      handleSorting()
+    }
+  }, [data, running])
+
   // Start the sort
   const handleSorting = () => {
-    setRunning(STATUS.IN_PROGRESS)
+    if (running === STATUS.FINISHED) {
+      generateNewRandomData()
+      setRunning(STATUS.RESTART)
+    } else {
+      setRunning(STATUS.IN_PROGRESS)
 
-    console.log("==== DO SORTING ")
+      console.log("==== DO SORTING ")
 
-    const sortingSteps = algos.bubbleSortAlgorithm(data) // Bubble for now
-    sortingSteps.push([-1, -1, false, null, true])
+      const sortingSteps = algos.bubbleSortAlgorithm(data) // Bubble for now
+      sortingSteps.push([-1, -1, false, null, true])
 
-    for (let index = 0; index < sortingSteps.length; index++) {
-      const orderEl = sortingSteps[index]
-      console.log("still running 1")
-      currentIndex.current += 1
+      for (let index = 0; index < sortingSteps.length; index++) {
+        const orderEl = sortingSteps[index]
+        console.log("still running 1")
+        currentIndex.current += 1
 
-      // Destructure el
-      const [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
+        // Destructure el
+        const [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
 
-      // Update state to trigger re-render. Do it with a timeout
-      timeouts.current = setTimeout(() => {
-        console.log("still running 2")
+        // Update state to trigger re-render. Do it with a timeout
+        timeouts.current = setTimeout(() => {
+          console.log("still running 2")
 
-        if (lastEl) {
-          setRunning(STATUS.FINISHED)
-          // Set local data to trigger a final render
-          setData((prevValues: number[]) => [...prevValues])
-          // Add the remaining elements to the values sorted array
-          sortingSteps?.forEach((el) => sortedValues.add(el))
-        } else {
-          setData((prevValues: number[]) => {
-            const indexOfFirst = prevValues.indexOf(firstEl)
-            const indexOfSecond = prevValues.indexOf(secondEl)
+          if (lastEl) {
+            setRunning(STATUS.FINISHED)
+            // Set local data to trigger a final render
+            setData((prevValues: number[]) => [...prevValues])
+            // Add the remaining elements to the values sorted array
+            sortingSteps?.forEach((el) => sortedValues.add(el))
+          } else {
+            setData((prevValues: number[]) => {
+              const indexOfFirst = prevValues.indexOf(firstEl)
+              const indexOfSecond = prevValues.indexOf(secondEl)
 
-            if (swap) {
-              prevValues[indexOfFirst] = secondEl
-              prevValues[indexOfSecond] = firstEl
-            }
+              if (swap) {
+                prevValues[indexOfFirst] = secondEl
+                prevValues[indexOfSecond] = firstEl
+              }
 
-            const containerWidth =
-              document.getElementById("bars-container")?.clientWidth ||
-              window.innerWidth - 20 // Guessed offset
+              const containerWidth =
+                document.getElementById("bars-container")?.clientWidth ||
+                window.innerWidth - 20 // Guessed offset
 
-            const offset = containerWidth / data.length
+              const offset = containerWidth / data.length
 
-            if (firstEl && secondEl) {
-              // Slide first bar
-              const leftEl = document.getElementById(`bar-${firstEl}`)
-              if (leftEl)
-                leftEl.style.transform = `translate(${
-                  firstEl > secondEl ? offset : 0
-                }px,0)`
+              if (firstEl && secondEl) {
+                // Slide first bar
+                const leftEl = document.getElementById(`bar-${firstEl}`)
+                if (leftEl)
+                  leftEl.style.transform = `translate(${
+                    firstEl > secondEl ? offset : 0
+                  }px,0)`
 
-              // Slide second bar
-              const rightEl = document.getElementById(`bar-${secondEl}`)
-              if (rightEl)
-                rightEl.style.transform = `translate(${
-                  secondEl > firstEl ? 0 : -offset
-                }px,0)`
-            }
+                // Slide second bar
+                const rightEl = document.getElementById(`bar-${secondEl}`)
+                if (rightEl)
+                  rightEl.style.transform = `translate(${
+                    secondEl > firstEl ? 0 : -offset
+                  }px,0)`
+              }
 
-            twoNumbersSelection.current = [
-              Math.min(firstEl, secondEl),
-              Math.max(firstEl, secondEl),
-            ]
-            // Add to sorted Set if existing
-            if (sortedValue)
-              setSortedValues((prevValues) => {
-                prevValues.add(sortedValue)
-                return prevValues
-              })
+              twoNumbersSelection.current = [
+                Math.min(firstEl, secondEl),
+                Math.max(firstEl, secondEl),
+              ]
+              // Add to sorted Set if existing
+              if (sortedValue)
+                setSortedValues((prevValues) => {
+                  prevValues.add(sortedValue)
+                  return prevValues
+                })
 
-            // twoNumbersSelection.current[1] = secondEl
-            return prevValues.slice()
-          })
-        }
-      }, speed * (index + 1))
+              // twoNumbersSelection.current[1] = secondEl
+              return prevValues.slice()
+            })
+          }
+        }, speed * (index + 1))
+      }
     }
   }
 
@@ -171,7 +184,7 @@ const SortingAlgorithmsPage = () => {
       while (timeouts.current--) window.clearTimeout(timeouts.current)
     }
     setData((prevData) => [...prevData])
-    setRunning(STATUS.FINISHED)
+    setRunning(STATUS.NOT_STARTED)
     twoNumbersSelection.current[0] = null
     twoNumbersSelection.current[1] = null
     initialData?.current?.forEach((el: number) => {
