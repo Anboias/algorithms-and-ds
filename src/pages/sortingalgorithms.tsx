@@ -5,7 +5,7 @@ import { StaticImage } from "gatsby-plugin-image"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import Content from "../components/content"
-import SortingTable from "../components/sorting/bubblesort"
+import BarsComponent from "../components/sorting/barscomponent"
 
 import { algos } from "../components/sorting/algorithms/sorting"
 
@@ -41,29 +41,30 @@ const STATUS = {
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(0) // Show bubble first as default
-  const [speed, setSpeed] = React.useState(500)
+  const [speed, setSpeed] = React.useState(150)
   const [noOfEntries, setNoOfEntries] = React.useState(25)
   const [data, setData] = React.useState([])
   const [running, setRunning] = React.useState(STATUS.NOT_STARTED)
   const [sortedValues, setSortedValues] = React.useState(new Set())
 
+  // Local state refs
   const initialData = React.useRef(null)
   const currentIndex = React.useRef(0)
   const timeouts = React.useRef(null)
   const savedSteps = React.useRef(null)
-
-  // Constants
-  const [max, min] = React.useMemo(
-    () => [Math.max(...data), Math.min(...data)],
-    [data]
-  )
-  const calcWidth = 100 / data.length
   const twoNumbersSelection = React.useRef([])
-  // Do sort - call sorting algorithm
-  const sortingSteps = React.useMemo(
-    () => algos.bubbleSortAlgorithm(data),
-    [data]
-  )
+
+  // Update data table with new values on entries change
+  React.useEffect(() => {
+    generateNewRandomData()
+  }, [noOfEntries])
+
+  // Update data table with new values on entries change
+  React.useEffect(() => {
+    if (running === STATUS.SPEED_CHANGED) setRunning(STATUS.IN_PROGRESS)
+    if (running === STATUS.RESTART || running === STATUS.SPEED_CHANGED)
+      handleSorting()
+  }, [data, running])
 
   // Handlers
   const handleSelection = (event: any) => {
@@ -90,25 +91,6 @@ const SortingAlgorithmsPage = () => {
     setData(newData)
     setSortedValues(new Set())
   }
-  // Update data table with new values on entries change
-  React.useEffect(() => {
-    generateNewRandomData()
-  }, [noOfEntries])
-
-  // Update data table with new values on entries change
-  React.useEffect(() => {
-    if (running === STATUS.RESTART) {
-      handleSorting()
-    }
-  }, [data, running])
-
-  // Update data table with new values on entries change
-  React.useEffect(() => {
-    if (running === STATUS.SPEED_CHANGED) {
-      setRunning(STATUS.IN_PROGRESS)
-      handleSorting()
-    }
-  }, [running])
 
   // Start the sort
   const handleSorting = () => {
@@ -217,7 +199,6 @@ const SortingAlgorithmsPage = () => {
         document.getElementById(`bar-${el}`).style === null
       } catch (err) {}
     })
-    // generateNewRandomData()
   }
 
   const handleSpeedChange = (event) => {
@@ -233,21 +214,16 @@ const SortingAlgorithmsPage = () => {
         handleSelection={handleSelection}
         options={sortingAlgorithms}
         selected={selected}
-        setSpeed={setSpeed}
-        speed={speed}
         title="Sorting Algorithms"
       >
         <div
           style={{
             border: "1px dotted rgba(12,12,12,0.02)",
-            // backgroundColor: "rgba(12,12,12,0.03)",
             height: "100%",
           }}
         >
           <div
             style={{
-              // marginTop: -5,
-              // marginBottom: 5,
               padding: 0,
               display: "flex",
               flexDirection: "row",
@@ -267,7 +243,6 @@ const SortingAlgorithmsPage = () => {
             >
               <div
                 style={{
-                  // marginLeft: 10,
                   width: "100%",
                   display: "flex",
                   flexDirection: "row",
@@ -275,18 +250,15 @@ const SortingAlgorithmsPage = () => {
                   color: "gray",
                 }}
               >
-                <Tooltip title="Number of entries" placement="bottom">
+                <Tooltip title="Number of entries" placement="top">
                   <AddIcon style={{ marginRight: 7, fontSize: 18 }} />
                 </Tooltip>
                 <Slider
                   aria-label="Entries"
                   defaultValue={noOfEntries}
                   onChange={(event) => setNoOfEntries(event.target.value)}
-                  // getAriaValueText={noOfEntries}
-                  // marks
                   min={5}
                   max={100}
-                  // step={5}
                   valueLabelDisplay="auto"
                 />
               </div>
@@ -300,28 +272,27 @@ const SortingAlgorithmsPage = () => {
                   color: "gray",
                 }}
               >
-                <Tooltip title="Time in milliseconds" placement="bottom">
+                <Tooltip title="Time in milliseconds" placement="top">
                   <FastForwardIcon style={{ marginRight: 7, fontSize: 18 }} />
                 </Tooltip>
                 <Slider
                   aria-label="Speed"
                   defaultValue={speed}
                   onChange={handleSpeedChange}
-                  // getAriaValueText={noOfEntries}
-                  min={25}
+                  min={1}
                   max={1000}
                   step={25}
                   // marks={[
                   //   { value: (1000 - 25) / 2, label: "25 ms to 1 second" },
                   // ]}
-                  sx={{
-                    ".MuiSlider-markLabel": {
-                      color: "gray",
-                      fontSize: 12,
-                      margin: 0,
-                      position: "absolute",
-                    },
-                  }}
+                  // sx={{
+                  //   ".MuiSlider-markLabel": {
+                  //     color: "gray",
+                  //     fontSize: 12,
+                  //     margin: 0,
+                  //     position: "absolute",
+                  //   },
+                  // }}
                   valueLabelDisplay="auto"
                 />
               </div>
@@ -335,20 +306,13 @@ const SortingAlgorithmsPage = () => {
                 width: "30%",
               }}
             >
-              {/* <span style={{ fontSize: 14, color: "gray" }}>Start</span> */}
               <Button
                 startIcon={<ReplayIcon />}
                 onClick={generateNewRandomData}
-                style={{
-                  // marginBottom: 5,
-                  padding: "4px 10px",
-                }}
-                sx={{
-                  ...classes.button,
-                  // border: `2px solid ${constants.COLORS.SLIDER_BLUE}`,
-                }}
+                style={{ padding: "4px 10px" }}
+                sx={classes.button}
               >
-                New Values
+                Refresh
               </Button>
               {running === STATUS.IN_PROGRESS ? (
                 <Button
@@ -360,10 +324,7 @@ const SortingAlgorithmsPage = () => {
                     marginRight: 5,
                     padding: "4px 10px",
                   }}
-                  sx={{
-                    ...classes.button,
-                    // border: `2px solid ${constants.COLORS.SLIDER_BLUE}`,
-                  }}
+                  sx={classes.button}
                 >
                   Pause
                 </Button>
@@ -376,17 +337,14 @@ const SortingAlgorithmsPage = () => {
                     marginRight: 5,
                     padding: "4px 10px",
                   }}
-                  sx={{
-                    ...classes.button,
-                    // border: `2px solid ${constants.COLORS.SLIDER_BLUE}`,
-                  }}
+                  sx={classes.button}
                 >
                   Start
                 </Button>
               )}
             </Box>
           </div>
-          <SortingTable
+          <BarsComponent
             data={data}
             sortedValues={sortedValues}
             twoNumbersSelection={twoNumbersSelection}

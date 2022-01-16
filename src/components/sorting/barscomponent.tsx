@@ -1,19 +1,17 @@
 import * as React from "react"
-import { Button } from "@mui/material"
-import { algos } from "../../components/sorting/algorithms/sorting"
 import constants from "../../constants"
 
-interface BubbleSortI {
+interface BarsComponentI {
   data?: number[]
   sortedValues: Set<unknown>
   twoNumbersSelection: any
 }
 
-const BubbleSort = ({
+const BarsComponent = ({
   data,
   sortedValues,
   twoNumbersSelection,
-}: BubbleSortI) => {
+}: BarsComponentI) => {
   // Constants
   const [max, min] = React.useMemo(
     () => (data ? [Math.max(...data), Math.min(...data)] : null),
@@ -21,20 +19,13 @@ const BubbleSort = ({
   )
   const calcWidth = 100 / data.length
 
-  // // Initialize vars
-  // React.useEffect(() => {
-  //   setLocalData(data)
-  //   sortedValues.clear()
-  //   twoNumbersSelection.current = []
-  // }, [data])
-
   return (
     <div
       id="bars-container"
       style={{
         display: "flex",
         flexDirection: "row",
-        height: "100%",
+        height: "90%",
         // transition: "1s all ease",
       }}
     >
@@ -93,4 +84,4 @@ const BubbleSort = ({
   )
 }
 
-export default BubbleSort
+export default BarsComponent

@@ -1,10 +1,3 @@
-/**
- * Content component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/use-static-query/
- */
-
 import * as React from "react"
 import { Badge, Button } from "@mui/material"
 import classes from "./content.classes"
@@ -12,24 +5,16 @@ import classes from "./content.classes"
 interface ContentI {
   children: React.ReactNode
   handleSelection(event: any): void
-  setNoOfEntries(event: any): void
-  setSpeed(event: any): void
   options: string[]
   selected: number
-  speed: number
-  noOfEntries: number
   title: string
 }
 
 const Content = ({
   children,
   handleSelection,
-  noOfEntries,
   options,
   selected,
-  setNoOfEntries,
-  setSpeed,
-  speed,
   title,
 }: ContentI) => {
   return (
