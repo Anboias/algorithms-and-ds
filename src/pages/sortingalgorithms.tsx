@@ -45,6 +45,7 @@ const SortingAlgorithmsPage = () => {
   const initialData = React.useRef(null)
   const currentIndex = React.useRef(0)
   const timeouts = React.useRef(null)
+  const savedSteps = React.useRef(null)
 
   // Constants
   const [max, min] = React.useMemo(
@@ -68,7 +69,7 @@ const SortingAlgorithmsPage = () => {
   // Load random data
   const generateNewRandomData = () => {
     // Clean running processes
-    handleStop()
+    handleStop(true)
 
     // Handle numbers generator
     const newData = Array.from({ length: noOfEntries })
@@ -106,20 +107,42 @@ const SortingAlgorithmsPage = () => {
 
       console.log("==== DO SORTING ")
 
-      const sortingSteps = algos.bubbleSortAlgorithm(data) // Bubble for now
-      sortingSteps.push([-1, -1, false, null, true])
+      let sortingSteps = null
+      if (currentIndex.current > 0) sortingSteps = savedSteps.current.slice()
+      else {
+        sortingSteps = algos.bubbleSortAlgorithm(data) // Bubble for now
+        sortingSteps.push([-1, -1, false, null, true])
+        savedSteps.current = []
+        savedSteps.current.push(...sortingSteps)
+      }
 
-      for (let index = 0; index < sortingSteps.length; index++) {
+      console.log(
+        ">>>>>>> BEFORE LOOP",
+        currentIndex.current,
+        sortingSteps.length
+      )
+
+      let counter = 0
+      for (
+        let index = currentIndex.current;
+        index < sortingSteps.length;
+        index++, counter++
+      ) {
         const orderEl = sortingSteps[index]
-        console.log("still running 1")
-        currentIndex.current += 1
+        console.log("still running 2")
 
         // Destructure el
         const [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
 
         // Update state to trigger re-render. Do it with a timeout
         timeouts.current = setTimeout(() => {
-          console.log("still running 2")
+          currentIndex.current += 1
+
+          console.log(
+            ">>>>>>> still running 1",
+            currentIndex.current,
+            sortingSteps.length
+          )
 
           if (lastEl) {
             setRunning(STATUS.FINISHED)
@@ -174,19 +197,23 @@ const SortingAlgorithmsPage = () => {
               return prevValues.slice()
             })
           }
-        }, speed * (index + 1))
+        }, speed * (counter + 1))
       }
     }
   }
 
-  const handleStop = () => {
+  const handleStop = (finish = false) => {
     if (running === STATUS.IN_PROGRESS) {
       while (timeouts.current--) window.clearTimeout(timeouts.current)
     }
+    if (running === STATUS.FINISHED || finish === true) {
+      currentIndex.current = 0
+      savedSteps.current = null
+      twoNumbersSelection.current[0] = null
+      twoNumbersSelection.current[1] = null
+    }
     setData((prevData) => [...prevData])
     setRunning(STATUS.NOT_STARTED)
-    twoNumbersSelection.current[0] = null
-    twoNumbersSelection.current[1] = null
     initialData?.current?.forEach((el: number) => {
       try {
         document.getElementById(`bar-${el}`).style === null
@@ -304,7 +331,7 @@ const SortingAlgorithmsPage = () => {
                 }
                 sx={{ ...classes.button }}
               >
-                Randomize
+                New Values
               </Button>
               <Button
                 className={running === STATUS.IN_PROGRESS && "active"}
@@ -317,7 +344,7 @@ const SortingAlgorithmsPage = () => {
                 }}
                 sx={{ ...classes.button }}
               >
-                {running === STATUS.IN_PROGRESS ? "Stop" : "Start"}
+                {running === STATUS.IN_PROGRESS ? "Pause" : "Start"}
               </Button>
             </Box>
           </div>
