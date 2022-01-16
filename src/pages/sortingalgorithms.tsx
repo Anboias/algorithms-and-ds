@@ -12,6 +12,9 @@ import { algos } from "../components/sorting/algorithms/sorting"
 import { Box, Button, Slider } from "@mui/material"
 import FastForwardIcon from "@mui/icons-material/FastForward"
 import AddIcon from "@mui/icons-material/Add"
+import PlayArrowIcon from "@mui/icons-material/PlayArrow"
+import PauseIcon from "@mui/icons-material/Pause"
+import ReplayIcon from "@mui/icons-material/Replay"
 
 import useTimeout from "../components/hooks/usetimeout"
 
@@ -323,29 +326,53 @@ const SortingAlgorithmsPage = () => {
             >
               {/* <span style={{ fontSize: 14, color: "gray" }}>Start</span> */}
               <Button
+                startIcon={<ReplayIcon />}
                 onClick={generateNewRandomData}
-                style={
-                  {
-                    // marginBottom: 5,
-                  }
-                }
-                sx={{ ...classes.button }}
+                style={{
+                  // marginBottom: 5,
+                  padding: "4px 10px",
+                }}
+                sx={{
+                  ...classes.button,
+                  // border: `2px solid ${constants.COLORS.SLIDER_BLUE}`,
+                }}
               >
                 New Values
               </Button>
-              <Button
-                className={running === STATUS.IN_PROGRESS && "active"}
-                onClick={
-                  running === STATUS.IN_PROGRESS ? handleStop : handleSorting
-                }
-                style={{
-                  marginLeft: 10,
-                  marginRight: 5,
-                }}
-                sx={{ ...classes.button }}
-              >
-                {running === STATUS.IN_PROGRESS ? "Pause" : "Start"}
-              </Button>
+              {running === STATUS.IN_PROGRESS ? (
+                <Button
+                  className="active"
+                  startIcon={<PauseIcon />}
+                  onClick={handleStop}
+                  style={{
+                    marginLeft: 10,
+                    marginRight: 5,
+                    padding: "4px 10px",
+                  }}
+                  sx={{
+                    ...classes.button,
+                    // border: `2px solid ${constants.COLORS.SLIDER_BLUE}`,
+                  }}
+                >
+                  Pause
+                </Button>
+              ) : (
+                <Button
+                  startIcon={<PlayArrowIcon sx={{}} />}
+                  onClick={handleSorting}
+                  style={{
+                    marginLeft: 10,
+                    marginRight: 5,
+                    padding: "4px 10px",
+                  }}
+                  sx={{
+                    ...classes.button,
+                    // border: `2px solid ${constants.COLORS.SLIDER_BLUE}`,
+                  }}
+                >
+                  Start
+                </Button>
+              )}
             </Box>
           </div>
           <SortingTable
