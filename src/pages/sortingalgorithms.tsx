@@ -15,6 +15,7 @@ import AddIcon from "@mui/icons-material/Add"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import PauseIcon from "@mui/icons-material/Pause"
 import ReplayIcon from "@mui/icons-material/Replay"
+import Tooltip from "@mui/material/Tooltip"
 
 import useTimeout from "../components/hooks/usetimeout"
 
@@ -34,6 +35,7 @@ const STATUS = {
   IN_PROGRESS: "IN_PROGRESS",
   FINISHED: "FINISHED",
   RESTART: "RESTART",
+  SPEED_CHANGED: "SPEED_CHANGED",
 }
 
 const SortingAlgorithmsPage = () => {
@@ -100,6 +102,14 @@ const SortingAlgorithmsPage = () => {
     }
   }, [data, running])
 
+  // Update data table with new values on entries change
+  React.useEffect(() => {
+    if (running === STATUS.SPEED_CHANGED) {
+      setRunning(STATUS.IN_PROGRESS)
+      handleSorting()
+    }
+  }, [running])
+
   // Start the sort
   const handleSorting = () => {
     if (running === STATUS.FINISHED) {
@@ -107,8 +117,6 @@ const SortingAlgorithmsPage = () => {
       setRunning(STATUS.RESTART)
     } else {
       setRunning(STATUS.IN_PROGRESS)
-
-      console.log("==== DO SORTING ")
 
       let sortingSteps = null
       if (currentIndex.current > 0) sortingSteps = savedSteps.current.slice()
@@ -119,12 +127,6 @@ const SortingAlgorithmsPage = () => {
         savedSteps.current.push(...sortingSteps)
       }
 
-      console.log(
-        ">>>>>>> BEFORE LOOP",
-        currentIndex.current,
-        sortingSteps.length
-      )
-
       let counter = 0
       for (
         let index = currentIndex.current;
@@ -132,7 +134,6 @@ const SortingAlgorithmsPage = () => {
         index++, counter++
       ) {
         const orderEl = sortingSteps[index]
-        console.log("still running 2")
 
         // Destructure el
         const [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
@@ -140,12 +141,6 @@ const SortingAlgorithmsPage = () => {
         // Update state to trigger re-render. Do it with a timeout
         timeouts.current = setTimeout(() => {
           currentIndex.current += 1
-
-          console.log(
-            ">>>>>>> still running 1",
-            currentIndex.current,
-            sortingSteps.length
-          )
 
           if (lastEl) {
             setRunning(STATUS.FINISHED)
@@ -206,7 +201,7 @@ const SortingAlgorithmsPage = () => {
   }
 
   const handleStop = (finish = false) => {
-    if (running === STATUS.IN_PROGRESS) {
+    if (running === STATUS.IN_PROGRESS || running === STATUS.SPEED_CHANGED) {
       while (timeouts.current--) window.clearTimeout(timeouts.current)
     }
     if (running === STATUS.FINISHED || finish === true) {
@@ -225,10 +220,11 @@ const SortingAlgorithmsPage = () => {
     // generateNewRandomData()
   }
 
-  console.log("==== initialData.current", initialData.current)
-  console.log("==== timeouts.current", timeouts.current)
-  console.log("==== currentIndex.current", currentIndex.current)
-  console.log("==== running", running)
+  const handleSpeedChange = (event) => {
+    setSpeed(event.target.value)
+    handleStop()
+    setRunning(STATUS.SPEED_CHANGED)
+  }
 
   return (
     <Layout>
@@ -279,7 +275,9 @@ const SortingAlgorithmsPage = () => {
                   color: "gray",
                 }}
               >
-                <AddIcon style={{ marginRight: 7, fontSize: 18 }} />
+                <Tooltip title="Number of entries" placement="bottom">
+                  <AddIcon style={{ marginRight: 7, fontSize: 18 }} />
+                </Tooltip>
                 <Slider
                   aria-label="Entries"
                   defaultValue={noOfEntries}
@@ -302,15 +300,28 @@ const SortingAlgorithmsPage = () => {
                   color: "gray",
                 }}
               >
-                <FastForwardIcon style={{ marginRight: 7, fontSize: 18 }} />
+                <Tooltip title="Time in milliseconds" placement="bottom">
+                  <FastForwardIcon style={{ marginRight: 7, fontSize: 18 }} />
+                </Tooltip>
                 <Slider
                   aria-label="Speed"
                   defaultValue={speed}
-                  onChange={(event) => setSpeed(event.target.value)}
+                  onChange={handleSpeedChange}
                   // getAriaValueText={noOfEntries}
                   min={25}
                   max={1000}
-                  // step={50}
+                  step={25}
+                  // marks={[
+                  //   { value: (1000 - 25) / 2, label: "25 ms to 1 second" },
+                  // ]}
+                  sx={{
+                    ".MuiSlider-markLabel": {
+                      color: "gray",
+                      fontSize: 12,
+                      margin: 0,
+                      position: "absolute",
+                    },
+                  }}
                   valueLabelDisplay="auto"
                 />
               </div>
