@@ -6,7 +6,7 @@
  */
 
 import * as React from "react"
-import { Button } from "@mui/material"
+import { Badge, Button } from "@mui/material"
 import classes from "./content.classes"
 
 interface ContentI {
@@ -37,20 +37,27 @@ const Content = ({
       <h1 style={{ fontSize: "1.5em" }}>{title}</h1>
       <div style={{ margin: "10px 0" }}>
         {options.map((item, idx) => {
-          return (
+          const button = (
             <Button
               className={idx === selected ? "active" : ""}
               id={idx}
               key={idx}
               onClick={handleSelection}
               style={{
-                marginRight: 10,
+                marginLeft: idx !== 0 && 15,
                 marginBottom: 5,
               }}
               sx={{ ...classes.button }}
             >
               {item}
             </Button>
+          )
+          return item === "Bubble Sort" ? (
+            <Badge badgeContent={`✓`} color="primary" sx={{}}>
+              {button}
+            </Badge>
+          ) : (
+            button
           )
         })}
       </div>
@@ -63,7 +70,7 @@ const Content = ({
           backgroundColor: "rgba(12,12,12,0.04)",
         }}
       >
-        {selected >= 0 ? (
+        {selected === 0 ? ( // TODO: Inserted bug here: replace with >==
           children
         ) : (
           <div
@@ -75,7 +82,7 @@ const Content = ({
               justifyContent: "center",
             }}
           >
-            Make your selection
+            Nothing here yet
           </div>
         )}
       </div>

@@ -58,7 +58,7 @@ const SortingAlgorithmsPage = () => {
     }
   }
 
-  console.log("speed", speed)
+  // console.log("speed", speed)
 
   return (
     <Layout>

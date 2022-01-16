@@ -40,13 +40,13 @@ const BubbleSort = ({ data, speed }: BubbleSortI) => {
         sortedValues.add(sortedValue)
       }
 
-      console.log("before delay", speed)
+      // console.log("before delay", speed)
 
       // Add delay to the execution
       await doDelay(speed)
 
-      console.log("after delay", speed)
-      console.log("====================")
+      // console.log("after delay", speed)
+      // console.log("====================")
 
       setLocalData((prevValues: number[]) => {
         const indexOfFirst = prevValues.indexOf(firstEl)
@@ -104,6 +104,8 @@ const BubbleSort = ({ data, speed }: BubbleSortI) => {
     twoNumbersSelection.current = []
   }, [data])
 
+  // console.log("test")
+
   return (
     <div
       id="bars-container"
@@ -122,9 +124,9 @@ const BubbleSort = ({ data, speed }: BubbleSortI) => {
             id={`bar-${item}`}
             key={`${idx}-${item}`}
             style={{
-              height: `${calcHeight}%`,
+              height: `calc(${calcHeight}% - 60px)`,
               minHeight: `30px`,
-              width: `${calcWidth}%`,
+              width: `calc(${calcWidth}% - .3em)`,
               backgroundColor: sortedValues.has(item)
                 ? constants.COLORS.DARK_GREEN
                 : twoNumbersSelection.current[0] === item
