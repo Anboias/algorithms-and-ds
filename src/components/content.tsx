@@ -37,7 +37,7 @@ const Content = ({
               {item}
             </Button>
           )
-          return item === "Bubble Sort" ? (
+          return ["Bubble Sort", "Insertion Sort"].includes(item) ? (
             <Badge badgeContent={`✓`} color="primary" sx={{}}>
               {button}
             </Badge>
@@ -55,7 +55,7 @@ const Content = ({
           backgroundColor: "rgba(12,12,12,0.04)",
         }}
       >
-        {selected === 0 ? ( // TODO: Inserted bug here: replace with >==
+        {selected >= 0 ? (
           children
         ) : (
           <div

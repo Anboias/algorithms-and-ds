@@ -7,7 +7,7 @@ import Seo from "../components/seo"
 import Content from "../components/content"
 import BarsComponent from "../components/sorting/barscomponent"
 
-import { algos } from "../components/sorting/algorithms/sorting"
+import { algos } from "../components/sorting/algorithms"
 
 import { Box, Button, Slider } from "@mui/material"
 import FastForwardIcon from "@mui/icons-material/FastForward"
@@ -24,10 +24,10 @@ import classes from "../components/content.classes"
 
 const sortingAlgorithms = [
   "Bubble Sort",
+  "Insertion Sort",
   "Merge Sort",
   "Quick Sort",
   "Selection Sort",
-  "Insertion Sort",
 ]
 
 const STATUS = {
@@ -57,7 +57,7 @@ const SortingAlgorithmsPage = () => {
   // Update data table with new values on entries change
   React.useEffect(() => {
     generateNewRandomData()
-  }, [noOfEntries])
+  }, [noOfEntries, selected])
 
   // Update data table with new values on entries change
   React.useEffect(() => {
@@ -103,7 +103,8 @@ const SortingAlgorithmsPage = () => {
       let sortingSteps = null
       if (currentIndex.current > 0) sortingSteps = savedSteps.current.slice()
       else {
-        sortingSteps = algos.bubbleSortAlgorithm(data) // Bubble for now
+        if (selected === 0) sortingSteps = algos.bubbleSort(data) // Bubble sort
+        if (selected === 1) sortingSteps = algos.insertionSort(data) // Insertion sort
         sortingSteps.push([-1, -1, false, null, true])
         savedSteps.current = []
         savedSteps.current.push(...sortingSteps)
