@@ -23,6 +23,14 @@ const STATUS = {
   SPEED_CHANGED: "SPEED_CHANGED",
 }
 
+const algorithmsNames = [
+  "Bubble Sort",
+  "Insertion Sort",
+  "Selection Sort",
+  "Merge Sort",
+  "Quick Sort",
+]
+
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(0) // Show bubble first as default
@@ -90,6 +98,10 @@ const SortingAlgorithmsPage = () => {
       else {
         if (selected === 0) sortingSteps = algos.bubbleSort(data) // Bubble sort
         if (selected === 1) sortingSteps = algos.insertionSort(data) // Insertion sort
+        if (selected === 2) sortingSteps = algos.selectionSort(data) // Selection sort
+
+        console.log("sortingSteps", sortingSteps)
+
         sortingSteps.push([-1, -1, false, null, true])
         savedSteps.current = []
         savedSteps.current.push(...sortingSteps)
@@ -104,7 +116,7 @@ const SortingAlgorithmsPage = () => {
         const orderEl = sortingSteps[index]
 
         // Destructure el
-        const [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
+        let [firstEl, secondEl, swap, sortedValue, lastEl]: number[] = orderEl
 
         // Update state to trigger re-render. Do it with a timeout
         timeouts.current = setTimeout(() => {
@@ -151,10 +163,10 @@ const SortingAlgorithmsPage = () => {
                   }px,0)`
               }
 
-              twoNumbersSelection.current = [
-                Math.min(firstEl, secondEl),
-                Math.max(firstEl, secondEl),
-              ]
+              twoNumbersSelection.current =
+                selected === algorithmsNames.indexOf("Selection Sort")
+                  ? [Math.max(firstEl, secondEl), Math.min(firstEl, secondEl)]
+                  : [Math.min(firstEl, secondEl), Math.max(firstEl, secondEl)]
               // Add to sorted Set if existing
               if (sortedValue)
                 setSortedValues((prevValues) => {
@@ -201,6 +213,7 @@ const SortingAlgorithmsPage = () => {
       <Seo title="Home" />
       <Content
         handleSelection={handleSelection}
+        options={algorithmsNames}
         selected={selected}
         title="Sorting Algorithms"
       >

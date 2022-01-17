@@ -1,3 +1,12 @@
+/**
+ * Helpers
+ */
+const swap = (arr, i, j) => {
+  const temp = arr[i]
+  arr[i] = arr[j]
+  arr[j] = temp
+}
+
 export const algos = {
   bubbleSort: (data) => {
     const result = []
@@ -47,15 +56,28 @@ export const algos = {
     }
 
     for (i = 1; i <= blocks.length; i++) {
-      result.push([null, null, null, i])
+      result.push([null, null, null, i]) // Add at the end all elements in their sorded order
     }
 
     return result
   },
-}
+  selectionSort: (data) => {
+    const blocks = [...data]
+    const result = []
 
-const swap = (arr, i, j) => {
-  const temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
+    let i, j
+
+    for (i = 0; i < blocks.length; i++) {
+      for (j = i + 1; j < blocks.length; j++) {
+        result.push([blocks[i], blocks[j], null, null]) // Compare
+        if (blocks[i] > blocks[j]) {
+          swap(blocks, i, j)
+          result.push([blocks[i], blocks[j], true, null]) // Swap
+        }
+      }
+      result.push([null, null, null, blocks[i]]) // i-th element is in correct position ( Sorted )
+    }
+
+    return result
+  },
 }
