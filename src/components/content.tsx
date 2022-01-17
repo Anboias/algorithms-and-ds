@@ -5,23 +5,26 @@ import classes from "./content.classes"
 interface ContentI {
   children: React.ReactNode
   handleSelection(event: any): void
-  options: string[]
   selected: number
   title: string
 }
 
-const Content = ({
-  children,
-  handleSelection,
-  options,
-  selected,
-  title,
-}: ContentI) => {
+const algorithmsNames = [
+  "Bubble Sort",
+  "Insertion Sort",
+  "Merge Sort",
+  "Quick Sort",
+  "Selection Sort",
+]
+
+const completed = [algorithmsNames[0], algorithmsNames[1]]
+
+const Content = ({ children, handleSelection, selected, title }: ContentI) => {
   return (
     <div style={{ height: "100%", position: "relative" }}>
       <h1 style={{ fontSize: "1.5em" }}>{title}</h1>
       <div style={{ margin: "10px 0" }}>
-        {options.map((item, idx) => {
+        {algorithmsNames.map((item, idx) => {
           const button = (
             <Button
               className={idx === selected ? "active" : ""}
@@ -37,7 +40,7 @@ const Content = ({
               {item}
             </Button>
           )
-          return ["Bubble Sort", "Insertion Sort"].includes(item) ? (
+          return completed.includes(item) ? (
             <Badge badgeContent={`✓`} color="primary" sx={{}}>
               {button}
             </Badge>

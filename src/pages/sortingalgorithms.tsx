@@ -1,34 +1,19 @@
 import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
-
-import Layout from "../components/layout"
-import Seo from "../components/seo"
-import Content from "../components/content"
-import BarsComponent from "../components/sorting/barscomponent"
-
-import { algos } from "../components/sorting/algorithms"
-
-import { Box, Button, Slider } from "@mui/material"
-import FastForwardIcon from "@mui/icons-material/FastForward"
 import AddIcon from "@mui/icons-material/Add"
-import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import PauseIcon from "@mui/icons-material/Pause"
-import ReplayIcon from "@mui/icons-material/Replay"
-import Tooltip from "@mui/material/Tooltip"
-
-import useTimeout from "../components/hooks/usetimeout"
-
-import constants from "../constants"
+import { algos } from "../components/sorting/algorithms"
+import BarsComponent from "../components/sorting/barscomponent"
+import { Box, Button, Slider } from "@mui/material"
 import classes from "../components/content.classes"
-
-const sortingAlgorithms = [
-  "Bubble Sort",
-  "Insertion Sort",
-  "Merge Sort",
-  "Quick Sort",
-  "Selection Sort",
-]
+import constants from "../constants"
+import Content from "../components/content"
+import FastForwardIcon from "@mui/icons-material/FastForward"
+import Layout from "../components/layout"
+import PauseIcon from "@mui/icons-material/Pause"
+import PlayArrowIcon from "@mui/icons-material/PlayArrow"
+import ReplayIcon from "@mui/icons-material/Replay"
+import Seo from "../components/seo"
+import Tooltip from "@mui/material/Tooltip"
+import useTimeout from "../components/hooks/usetimeout"
 
 const STATUS = {
   NOT_STARTED: "NOT_STARTED",
@@ -216,7 +201,6 @@ const SortingAlgorithmsPage = () => {
       <Seo title="Home" />
       <Content
         handleSelection={handleSelection}
-        options={sortingAlgorithms}
         selected={selected}
         title="Sorting Algorithms"
       >
@@ -286,17 +270,6 @@ const SortingAlgorithmsPage = () => {
                   min={1}
                   max={1000}
                   step={25}
-                  // marks={[
-                  //   { value: (1000 - 25) / 2, label: "25 ms to 1 second" },
-                  // ]}
-                  // sx={{
-                  //   ".MuiSlider-markLabel": {
-                  //     color: "gray",
-                  //     fontSize: 12,
-                  //     margin: 0,
-                  //     position: "absolute",
-                  //   },
-                  // }}
                   valueLabelDisplay="auto"
                 />
               </div>
