@@ -31,16 +31,16 @@ const BarsComponent = ({
     >
       {data ? (
         data.map((item: number, idx: number) => {
-          const calcHeight = ((max - min) / 100) * item
+          const calcHeight = (100 / max) * item
 
           return (
             <div
               id={`bar-${item}`}
               key={`${idx}-${item}`}
               style={{
-                height: `calc(${calcHeight}% - 60px)`,
-                minHeight: `30px`,
-                width: `calc(${calcWidth}% - .3em)`,
+                height: `calc(${calcHeight}% )`,
+                minHeight: `12px`,
+                width: `calc(${calcWidth}% - .1em)`,
                 backgroundColor: sortedValues.has(item)
                   ? constants.COLORS.DARK_GREEN
                   : twoNumbersSelection.current[0] === item
@@ -48,7 +48,7 @@ const BarsComponent = ({
                   : twoNumbersSelection.current[1] === item
                   ? constants.COLORS.RIGHT_BAR
                   : constants.COLORS.CURRENT,
-                margin: `0 .15em`, // Change logic to fit in 100%
+                margin: `0 .05em`, // Change logic to fit in 100%
                 display: `flex`,
                 justifyContent: `center`,
                 borderRadius: "0 0 5px 5px",
@@ -68,11 +68,12 @@ const BarsComponent = ({
                     : twoNumbersSelection.current[1] === item
                     ? "white"
                     : constants.COLORS.DARK_GREEN,
-                  fontSize: "0.7em",
+                  fontSize: data?.length <= 50 ? "0.7em" : "0.3em",
                   padding: 5,
                 }}
               >
-                {data?.length <= 50 ? item : ""}{" "}
+                {item}
+                {/* {data?.length <= 50 ? item : ""}{" "} */}
               </p>
             </div>
           )

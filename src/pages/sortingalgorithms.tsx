@@ -81,7 +81,7 @@ const SortingAlgorithmsPage = () => {
     const newData = Array.from({ length: noOfEntries })
     let index = 0
     while (index < newData.length) {
-      var randomN = Math.floor(Math.random() * 100) + 10
+      var randomN = Math.floor(Math.random() * noOfEntries) + 1
       if (newData.indexOf(randomN) === -1) {
         newData[index] = randomN
         index++
@@ -136,8 +136,11 @@ const SortingAlgorithmsPage = () => {
               const indexOfSecond = prevValues.indexOf(secondEl)
 
               if (swap) {
-                prevValues[indexOfFirst] = secondEl
-                prevValues[indexOfSecond] = firstEl
+                // ES6 - switch values
+                ;[prevValues[indexOfFirst], prevValues[indexOfSecond]] = [
+                  prevValues[indexOfSecond],
+                  prevValues[indexOfFirst],
+                ]
               }
 
               const containerWidth =
