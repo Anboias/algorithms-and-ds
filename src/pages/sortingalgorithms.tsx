@@ -26,7 +26,7 @@ const STATUS = {
 const SortingAlgorithmsPage = () => {
   // Local state
   const [selected, setSelected] = React.useState(0) // Show bubble first as default
-  const [speed, setSpeed] = React.useState(150)
+  const [speed, setSpeed] = React.useState(-150)
   const [noOfEntries, setNoOfEntries] = React.useState(25)
   const [data, setData] = React.useState([])
   const [running, setRunning] = React.useState(STATUS.NOT_STARTED)
@@ -166,7 +166,7 @@ const SortingAlgorithmsPage = () => {
               return prevValues.slice()
             })
           }
-        }, speed * (counter + 1))
+        }, speed * -1 * (counter + 1))
       }
     }
   }
@@ -244,7 +244,7 @@ const SortingAlgorithmsPage = () => {
                 <Slider
                   aria-label="Entries"
                   defaultValue={noOfEntries}
-                  onChange={(event) => setNoOfEntries(event.target.value)}
+                  onChange={(event) => setNoOfEntries(-event.target.value)}
                   min={5}
                   max={100}
                   valueLabelDisplay="auto"
@@ -260,17 +260,22 @@ const SortingAlgorithmsPage = () => {
                   color: "gray",
                 }}
               >
-                <Tooltip title="Time in milliseconds" placement="top">
+                <Tooltip title="Delay between operations" placement="top">
                   <FastForwardIcon style={{ marginRight: 7, fontSize: 18 }} />
                 </Tooltip>
                 <Slider
                   aria-label="Speed"
                   defaultValue={speed}
                   onChange={handleSpeedChange}
-                  min={1}
-                  max={1000}
+                  min={-1000}
+                  max={-1}
                   step={25}
                   valueLabelDisplay="auto"
+                  valueLabelFormat={`${
+                    speed * -1 === 1000
+                      ? "1 second"
+                      : `${speed * -1} milliseconds`
+                  }`}
                 />
               </div>
             </Box>

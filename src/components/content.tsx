@@ -58,7 +58,7 @@ const Content = ({ children, handleSelection, selected, title }: ContentI) => {
           backgroundColor: "rgba(12,12,12,0.04)",
         }}
       >
-        {selected >= 0 ? (
+        {selected < 2 ? (
           children
         ) : (
           <div
