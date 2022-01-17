@@ -96,11 +96,9 @@ const SortingAlgorithmsPage = () => {
       let sortingSteps = null
       if (currentIndex.current > 0) sortingSteps = savedSteps.current.slice()
       else {
-        if (selected === 0) sortingSteps = algos.bubbleSort(data) // Bubble sort
-        if (selected === 1) sortingSteps = algos.insertionSort(data) // Insertion sort
-        if (selected === 2) sortingSteps = algos.selectionSort(data) // Selection sort
-
-        console.log("sortingSteps", sortingSteps)
+        if (selected === 0) sortingSteps = algos.bubbleSort(data)
+        else if (selected === 1) sortingSteps = algos.insertionSort(data)
+        else if (selected === 2) sortingSteps = algos.selectionSort(data)
 
         sortingSteps.push([-1, -1, false, null, true])
         savedSteps.current = []
@@ -257,7 +255,7 @@ const SortingAlgorithmsPage = () => {
                 <Slider
                   aria-label="Entries"
                   defaultValue={noOfEntries}
-                  onChange={(event) => setNoOfEntries(-event.target.value)}
+                  onChange={(event) => setNoOfEntries(event.target.value)}
                   min={5}
                   max={100}
                   valueLabelDisplay="auto"
@@ -307,7 +305,7 @@ const SortingAlgorithmsPage = () => {
                 style={{ padding: "4px 10px" }}
                 sx={classes.button}
               >
-                Refresh
+                Shuffle
               </Button>
               {running === STATUS.IN_PROGRESS ? (
                 <Button
