@@ -52,8 +52,6 @@ const BarsComponent = ({
                 display: `flex`,
                 justifyContent: `center`,
                 borderRadius: "0 0 5px 5px",
-                // transition: "all 0.1s ease-in-out",
-                // "webkit-transition": "all 0.1s ease-in-out",
                 // "-moz-transition": "all 0.1s ease-in-out",
                 // "-o-transition": "all 0.1s ease-in-out",
                 // "-ms-transition": "all 0.1s ease-in-out",

@@ -81,7 +81,9 @@ const SortingAlgorithmsPage = () => {
       }
     }
     initialData.current = newData.slice()
-    setData(newData)
+    // setData(newData)
+    const tempData = [38, 27, 43, 3, 9, 82, 10]
+    setData(tempData)
     setSortedValues(new Set())
   }
 
@@ -99,6 +101,13 @@ const SortingAlgorithmsPage = () => {
         if (selected === 0) sortingSteps = algos.bubbleSort(data)
         else if (selected === 1) sortingSteps = algos.insertionSort(data)
         else if (selected === 2) sortingSteps = algos.selectionSort(data)
+        else if (selected === 3) sortingSteps = algos.mergeSort(data)
+
+        console.log("sortingSteps", sortingSteps)
+        console.log(
+          "===== sortingSteps",
+          sortingSteps.filter((el) => el[3] === "4")
+        )
 
         sortingSteps.push([-1, -1, false, null, true])
         savedSteps.current = []

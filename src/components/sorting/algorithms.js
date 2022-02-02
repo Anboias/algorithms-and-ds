@@ -80,4 +80,58 @@ export const algos = {
 
     return result
   },
+  mergeSort: (data) => {
+    const blocks = [...data]
+    const result = []
+
+    const doDivideAndConquer = (arr, low, high) => {
+      if (low < high) {
+        const pivot = Math.floor((high + low) / 2)
+
+        console.log("===== ", arr, low, pivot, high)
+        doDivideAndConquer(arr, low, pivot)
+        doDivideAndConquer(arr, pivot + 1, high)
+
+        doMerge(arr, low, pivot, high, result)
+      }
+    }
+
+    doDivideAndConquer(blocks, 0, data.length - 1)
+
+    for (let i = 0; i < blocks.length; i++) {
+      console.log("result[i]", result[i], i)
+      result.push([null, null, null, i]) // i th element will be in correct position
+    }
+
+    return result
+  },
+}
+
+const doMerge = (blocks, low, pivot, high, result) => {
+  let i = low
+  let j = pivot + 1
+
+  const arr = []
+
+  while (i <= pivot && j <= high) {
+    result.push([blocks[i], blocks[j], blocks[i] > blocks[j], null])
+    if (blocks[i] <= blocks[j]) {
+      arr.push(blocks[i++])
+    } else arr.push(blocks[j++])
+  }
+
+  while (i <= pivot) {
+    result.push([blocks[i], null, null, null])
+    arr.push(blocks[i++])
+  }
+  while (j <= high) {
+    result.push([null, blocks[j], null, null])
+    arr.push(blocks[j++])
+  }
+
+  for (i = low; i <= high; i++) {
+    const temp = blocks[i]
+    blocks[i] = arr[i - low]
+    result.push([blocks[i], temp, true, blocks[i]])
+  }
 }

@@ -10,7 +10,12 @@ interface ContentI {
   title: string
 }
 
-const completed = ["Bubble Sort", "Insertion Sort", "Selection Sort"]
+const completed = [
+  "Bubble Sort",
+  "Insertion Sort",
+  "Selection Sort",
+  "Merge Sort",
+]
 
 const Content = ({
   children,
