@@ -81,9 +81,9 @@ const SortingAlgorithmsPage = () => {
       }
     }
     initialData.current = newData.slice()
-    // setData(newData)
-    const tempData = [38, 27, 43, 3, 9, 82, 10]
-    setData(tempData)
+    setData(newData)
+    // const tempData = [38, 27, 43, 3, 9, 82, 10]
+    // setData(tempData)
     setSortedValues(new Set())
   }
 
